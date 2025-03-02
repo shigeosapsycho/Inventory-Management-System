@@ -1,51 +1,115 @@
 class Table:
-    def __init__():
-        pass
-    
-    def add_row(set: str, item: str, stock: int, price):
-        """ 
-        Add row template:
-| {set} | {item}} |    {stock}    |   ${price}    |
-+-----+----------------------------------------+----------+----------+
-        """
+    def __init__(self, inv_filename="Inventory.txt", sold_inventory="Sold_Inventory.txt"):
+        self.inventory_file, self.sold_inventory_file = inv_filename, sold_inventory
+        self.inventory = []  # Stores formatted rows for display
+        self.sold_inventory = []
+
+    def add_item(self, set: str, item: str, stock: int, price):
+        """ Saves raw data to file but shortens text when displayed. """
         if isinstance(price, (float, int)):
             price = f"{price:.2f}"
         else:
             price = str(price)
+
         if len(price) > 7:
-            raise ValueError("Price can not be more than 7 digits long")
-        else:
-            price = price.ljust(8)
-        
-        # Check stock type
+            raise ValueError("Price cannot be more than 7 digits long")
+
+        # Validate stock type
         if not isinstance(stock, int):
-            print("Stock can only be an integer.")
+            print("Stock must be an integer.")
             return None
-        
-        # Check set length
+
+        # Validate set length
         if len(set) > 3:
-            print("Set can not be longer than 3 characters long.")
+            print("Set name cannot be longer than 3 characters.")
             return None
+
+        # Save full data to file (original item name)
+        with open(self.inventory_file, "a") as file:
+            file.write(f"{set.upper()}|{item}|{stock}|{price}\n")
+
+        # Also update inventory list for display purposes
+        self.load_inventory()
+
+    def load_inventory(self):
+        """Loads the inventory from the file into a list for display."""
+        self.inventory.clear()
+        try:
+            with open(self.inventory_file, "r") as file:
+                for line in file:
+                    parts = line.strip().split("|")
+                    if len(parts) != 4:
+                        continue
+                    
+                    set_str, item, stock, price = parts
+                    
+                    # Format each field properly
+                    set_str = set_str.ljust(3)
+                    
+                    # Shorten or pad item name for table display
+                    if len(item) > 38:
+                        item = item[:35] + "..."
+                    else:
+                        item = item.ljust(38)
+                    
+                    # Format stock and price with proper padding
+                    stock = stock.strip().center(8)
+                    price = price.strip().rjust(7)
+
+                    # Store formatted row
+                    self.inventory.append((set_str, item, stock, price))
+        except FileNotFoundError:
+            print("No inventory file found. Starting fresh.")
+
+    def check_inventory(self):
+        """ Reads formatted inventory and displays it in table format. """
+        header = "+-----+----------------------------------------+----------+----------+"
+        column_header = "| Set | Item                                   | Stock    | Price    |"
         
-        # Adjust item length
-        if len(item) > 38:
-            item = item[:38 - 3] + "..."
+        table_str = header + "\n" + column_header + "\n" + header + "\n"
+        
+        for set_str, item, stock, price in self.inventory:
+            table_str += f"| {set_str} | {item} | {stock} | ${price} |\n"
+            
+        table_str += header
+        
+        return table_str
+
+    def remove_item(self, index):
+        """ Removes an item from both the in-memory list and the file. """
+        if 0 <= index < len(self.inventory):
+            removed_entry = self.inventory[index]
+            
+            # Reload full data, remove the corresponding entry, and rewrite file
+            with open(self.inventory_file, "r") as file:
+                lines = file.readlines()
+            
+            with open(self.inventory_file, "w") as file:
+                for i, line in enumerate(lines):
+                    if i != index:
+                        file.write(line)
+            
+            print(f"Removed: {removed_entry}")
+            self.load_inventory()
         else:
-            item = item.ljust(38)
-        
-        return f"| {set.upper()} | {item} |    {stock}    | ${price} |"
+            print("Invalid index.")
 
-# Test area
-t = Table
-print("+-----+----------------------------------------+----------+----------+")
-print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100))
-print("+-----+----------------------------------------+----------+----------+")
+    def move_item(self, index, stock):
+        """ Move the row from inventory to sold inventory """
+        pass
 
-print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100.00))
-print("+-----+----------------------------------------+----------+----------+")
+    def update_item_stock(self):
+        """ Update the stock of an item """
+        pass
+    
+    def display_sold_inventory(self):
+        """ Display the sold inventory items (Items user has sold)"""
+        pass
 
-print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100.0))
-print("+-----+----------------------------------------+----------+----------+")
+# Test Area
+t = Table()
+t.add_item("mix", "Legendary Premium Warriors Collection", 4, 100)
+t.add_item("mix", "Super Ultra Mega Collector's Set Edition", 2, 250.00)
+t.add_item("abc", "A shorter name", 10, 49.99)
 
-print(t.add_row("mix", "Legendary Premium Warriors Collectionhdjbfhbkfdhkgakdsg", 4, 100.0))
-print("+-----+----------------------------------------+----------+----------+")
+print(t.check_inventory())

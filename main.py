@@ -1,11 +1,13 @@
 import os, time
 from datetime import datetime as dt
-import Table
+import Table as Table
 
 def clear_console():
+    """ Clear console """
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def check_first_time():
+    """ Check if it's the user's first time ever opening the program """
     file = "Name.txt"
     if os.path.exists(file):
         return True
@@ -14,29 +16,33 @@ def check_first_time():
         with open(file, "w") as file:
             file.write(prompt)
 
-def check_inventory():
-    pass
-
-def check_sold_items():
-    pass
-
-def remove_item():
-    pass
-
-def update_item_stock():
-    pass
-
 def clear_inventory():
-    pass
+    """ Clear the inventory, prompts the user if they are sure with their choice. """
+    clear_console()
+    while True:
+        confirmation = input("Are you sure you want to clear your inventory?\nYou can NOT revert this change Y/N\n\n").upper()
+        
+        if confirmation == "YES" or confirmation == "Y":
+            print("Inventory Cleared.")
+            with open("Inventory.txt", "w") as file:
+                file.write("")
+            time.sleep(1)
+            clear_console()
+            break
+        elif confirmation == "NO" or confirmation == "N":
+            print("Inventory deletion voided. Returning back to the menu.")
+            time.sleep(1)
+            clear_console()
+            break
+        else:
+            print("Not a valid option.")
+            time.sleep(1)
+            clear_console()
 
 def make_file():
-    """
-    Logic: it needs to check if the file is there or not, if its not there it will create two files: inventory_file and sold_file
-    Check if it exists by using an if statement.
-    """
+    """ Makes the files Inventory.txt and Sold_Inventory.txt for the program"""
     folder_directory = os.getcwd()
-    files = ["Inventory.txt", "Outbound.txt"]
-    # files = ["Inventory.txt", "Outbound.txt", "Name.txt"]
+    files = ["Inventory.txt", "Sold_Inventory.txt"]
     
     file_paths = {name: os.path.join(folder_directory, name) for name in files}
 
@@ -44,6 +50,9 @@ def make_file():
         for file in files:
             with open(file, "w") as file:
                 pass
+
+def sort_inventory():
+    pass
 
 def change_name(input):
     pass
@@ -60,7 +69,7 @@ def main(): # Menu
         
         # Greet the user
         print(f"Welcome back, {name}!\nIt is {dt.now().strftime("%B %d, %Y")}.")
-        print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Add/Edit Note(s)':<20} {'8. Check Note(s)'}\n9. Terminate Program\n")
+        print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Sort Inventory':<20} {'8. Search Inventory'}\n9. Terminate Program\n")
         option = input()
         
         match option:
@@ -77,33 +86,14 @@ def main(): # Menu
                 clear_console()
                 break
             case "5": # Clear Inventory
-                clear_console()
-                while True:
-                    confirmation = input("Are you sure you want to clear your inventory?\nYou can NOT revert this change Y/N\n\n").upper()
-                    
-                    if confirmation == "YES" or confirmation == "Y":
-                        print("Inventory Cleared.")
-                        with open("Inventory.txt", "w") as file:
-                            file.write("")
-                        time.sleep(1)
-                        clear_console()
-                        break
-                    elif confirmation == "NO" or confirmation == "N":
-                        print("Inventory deletion voided. Returning back to the menu.")
-                        time.sleep(1)
-                        clear_console()
-                        break
-                    else:
-                        print("Not a valid option.")
-                        time.sleep(1)
-                        clear_console()
+                clear_inventory()
             case "6":
                 clear_console() # Change Name
                 break
-            case "7": # Add/Edit Note(s)
+            case "7": # Sort Invenotory
                 clear_console()
                 break
-            case "8": # Check Note(s)
+            case "8": # Search Inventory
                 clear_console()
                 break
             case "9": # Terminate Program
@@ -116,3 +106,16 @@ def main(): # Menu
             
 if __name__ == "__main__":
     main()
+    
+""" Current plans:
+Greet User:
+    Greet the user in good morning/good afternoon depending on the time of day
+Search Inventory:
+    When searching inventory you are dispalyed these options:
+        Search by: 1. Set or Item
+Sort Inventory:
+    When sortiong inventory you are displayed these options:
+        Sort by: 1. Set, 2. Alphabetical Order, 3. Stock, 4. Price
+Clear Inventory:
+    Decide if I want to make it replace everything in the text or to delet the file so they can recover it in the trash can.
+"""
