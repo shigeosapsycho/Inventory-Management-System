@@ -20,9 +20,6 @@ def check_inventory():
 def check_sold_items():
     pass
 
-def add_item():
-    pass
-
 def remove_item():
     pass
 
@@ -63,35 +60,53 @@ def main(): # Menu
         
         # Greet the user
         print(f"Welcome back, {name}!\nIt is {dt.now().strftime("%B %d, %Y")}.")
-        print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Add/Edit note':<20} {'8. Check Notes'}\n9. Terminate Program\n")
+        print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Add/Edit Note(s)':<20} {'8. Check Note(s)'}\n9. Terminate Program\n")
         option = input()
-        # option = input("Welcome to the Inventory Management System!\n1. Check Inventory\n2. Add Item\n3. Remove Item\n4. Update Item\n5. Clear Inventory\n6. Check Items Sold\n7. Exit\n\n") # Currently this is a lot of options I might do a page thing
+        
         match option:
-            case "1":
+            case "1": # Check Inventory
                 print("Option 1")
                 clear_console()
-            case "2":
+            case "2": # Add Item
                 clear_console()
                 break
-            case "3":
+            case "3": # Remove Item
                 clear_console()
                 break
-            case "4":
+            case "4": # Update Item
                 clear_console()
                 break
-            case "5":
+            case "5": # Clear Inventory
                 clear_console()
-                break
+                while True:
+                    confirmation = input("Are you sure you want to clear your inventory?\nYou can NOT revert this change Y/N\n\n").upper()
+                    
+                    if confirmation == "YES" or confirmation == "Y":
+                        print("Inventory Cleared.")
+                        with open("Inventory.txt", "w") as file:
+                            file.write("")
+                        time.sleep(1)
+                        clear_console()
+                        break
+                    elif confirmation == "NO" or confirmation == "N":
+                        print("Inventory deletion voided. Returning back to the menu.")
+                        time.sleep(1)
+                        clear_console()
+                        break
+                    else:
+                        print("Not a valid option.")
+                        time.sleep(1)
+                        clear_console()
             case "6":
+                clear_console() # Change Name
+                break
+            case "7": # Add/Edit Note(s)
                 clear_console()
                 break
-            case "7":
+            case "8": # Check Note(s)
                 clear_console()
                 break
-            case "8":
-                clear_console()
-                break
-            case "9":
+            case "9": # Terminate Program
                 print(f"See you next time, {name}!")
                 break
             case _:
