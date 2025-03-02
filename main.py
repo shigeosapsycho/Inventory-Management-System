@@ -1,5 +1,5 @@
-import os
-from datetime import datetime
+import os, time
+from datetime import datetime as dt
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -61,8 +61,7 @@ def main(): # Menu
         make_file()
         
         # Greet the user
-        print(f"Welcome back, {name}!")
-        print("What would you like to do?")
+        print(f"Welcome back, {name}!\nIt is {dt.now().strftime("%B %d, %Y")}.")
         print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Add/Edit note':<20} {'8. Check Notes'}\n9. Terminate Program\n")
         option = input()
         # option = input("Welcome to the Inventory Management System!\n1. Check Inventory\n2. Add Item\n3. Remove Item\n4. Update Item\n5. Clear Inventory\n6. Check Items Sold\n7. Exit\n\n") # Currently this is a lot of options I might do a page thing
@@ -95,8 +94,9 @@ def main(): # Menu
                 print(f"See you next time, {name}!")
                 break
             case _:
-                print("Invalid option.\n")
                 clear_console()
+                print("Invalid option.")
+                time.sleep(1)
                 # break
             
 if __name__ == "__main__":
