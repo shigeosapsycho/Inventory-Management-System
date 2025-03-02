@@ -1,5 +1,6 @@
 import os, time
 from datetime import datetime as dt
+import Table
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -97,7 +98,6 @@ def main(): # Menu
                 clear_console()
                 print("Invalid option.")
                 time.sleep(1)
-                # break
             
 if __name__ == "__main__":
     main()
