@@ -15,7 +15,7 @@ class Table:
         if len(price) > 7:
             raise ValueError("Price can not be more than 7 digits long")
         else:
-            price = price.ljust(7)
+            price = price.ljust(8)
         
         # Check stock type
         if not isinstance(stock, int):
@@ -37,17 +37,15 @@ class Table:
 
 # Test area
 t = Table
-# t.add_row("MIX", "Legendary Warrior Collection", 4, 100.00)
-# t.add_row("MIX", "Legendary Warrior Collection", "100")
-# print("+-----+----------------------------------------+----------+----------+")
-# print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100))
-# print("+-----+----------------------------------------+----------+----------+")
+print("+-----+----------------------------------------+----------+----------+")
+print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100))
+print("+-----+----------------------------------------+----------+----------+")
 
-# print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100.00))
-# print("+-----+----------------------------------------+----------+----------+")
+print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100.00))
+print("+-----+----------------------------------------+----------+----------+")
 
-# print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100.0))
-# print("+-----+----------------------------------------+----------+----------+")
+print(t.add_row("mix", "Legendary Premium Warriors Collection", 4, 100.0))
+print("+-----+----------------------------------------+----------+----------+")
 
-# print(t.add_row("mix", "Legendary Premium Warriors Collectionhdjbfhbkfdhkgakdsg", 4, 100.0))
-# print("+-----+----------------------------------------+----------+----------+")
+print(t.add_row("mix", "Legendary Premium Warriors Collectionhdjbfhbkfdhkgakdsg", 4, 100.0))
+print("+-----+----------------------------------------+----------+----------+")
