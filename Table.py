@@ -1,7 +1,8 @@
 class Table:
     def __init__(self, inv_filename="Inventory.txt", sold_inventory="Sold_Inventory.txt"):
         self.inventory_file, self.sold_inventory_file = inv_filename, sold_inventory
-        self.inventory = []  # Stores formatted rows for display
+        # Stores formatted rows for display
+        self.inventory = []  
         self.sold_inventory = []
 
     def add_item(self, set: str, item: str, stock: int, price):
@@ -70,7 +71,6 @@ class Table:
         
         for set_str, item, stock, price in self.inventory:
             table_str += f"| {set_str} | {item} | {stock} | ${price} |\n"
-            
         table_str += header
         
         return table_str
@@ -102,14 +102,24 @@ class Table:
         """ Update the stock of an item """
         pass
     
-    def display_sold_inventory(self):
+    def check_sold_inventory(self):
         """ Display the sold inventory items (Items user has sold)"""
-        pass
+        header = "+-----+----------------------------------------+------------+--------------+"
+        column_header = "| Set | Item                                   | # Sold     | Price Sold   |"
+
+        sold_table_str = header + "\n" + column_header + "\n" + header + "\n"
+        
+        for set_str, item, stock, price in self.sold_inventory:
+            sold_table_str += f"| {set_str} | {item} | {stock} | ${price} |"
+        
+        sold_table_str += header
+        
+        return sold_table_str
 
 # Test Area
 t = Table()
-t.add_item("mix", "Legendary Premium Warriors Collection", 4, 100)
-t.add_item("mix", "Super Ultra Mega Collector's Set Edition", 2, 250.00)
-t.add_item("abc", "A shorter name", 10, 49.99)
+# t.add_item("mix", "Legendary Premium Warriors Collection", 4, 100)
+# t.add_item("mix", "Super Ultra Mega Collector's Set Edition", 2, 250.00)
+# t.add_item("abc", "A shorter name", 10, 49.99)
 
 print(t.check_inventory())
