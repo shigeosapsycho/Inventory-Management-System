@@ -97,19 +97,30 @@ class Table:
         # Ask the user how much they want to move
         pass
 
-    def update_item_stock(self, index, number):
+    def update_item_stock(self, index, number): # NOT FINISHED
         """ Update the stock of an item """
-        # Edge case handling:
-        # 1. Index can not be out of bounds
-        pass
-    
+        # Can only update by += 1
+        if number > 0:
+            if 0 <= index < len(self.inventory):
+                update_entry = self.inventory[index]
+                
+                # Read the line and overwrite the current stock number
+                with open(self.inventory_file, "r") as file:
+                    # Split lines to edit stock item
+                    for line in file:
+                        row_read = line.strip().split("|")
+                    
+                    stock += number
+                
+                with open(self.inventory_file, "w") as file:
+                    pass
+        ValueError("Number has to be greater than 0.")
+                
     def load_sold_inventory(self):
         self.sold_inventory.clear()
         with open(self.sold_inventory_file, "r") as file:
             for line in file:
                 sold_parts = line.strip().split("|")
-                if len(sold_parts) != 4:
-                    continue
                 
                 set_str, item, num_sold, price = sold_parts
                 
