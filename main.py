@@ -1,4 +1,4 @@
-import os, time
+import os, time, sys
 from datetime import datetime as dt
 import Table as Table
 
@@ -127,7 +127,7 @@ def main(): # Menu
                 break
             case "9": # Terminate Program
                 print(f"See you next time, {name}!")
-                break
+                sys.exit()
             case _:
                 clear_console()
                 print("Invalid option.")
