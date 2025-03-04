@@ -52,7 +52,31 @@ def make_file():
                 pass
 
 def sort_inventory():
-    pass
+    clear_console()
+    while True:
+        if os.stat("Inventory.txt").st_size == 0:
+            print("Your file has nothing to sort.")
+            time.sleep(1)
+            clear_console()
+        sort_option = input(f"Sort inventory set by:\n{'1. Set':<10} {'2. Alphabetical Order':<10}\n{'3. Stock':<10} {'4. Price':<10}\n{'5. Exit':<10}\n")
+        
+        match sort_option:
+            case "1":
+                pass
+            case "2":
+                pass
+            case "3":
+                pass
+            case "4":
+                pass
+            case "5":
+                clear_console()
+                break
+            case _:
+                print("Not a valid option.")
+                time.sleep(1)
+                clear_console()
+        pass
 
 def change_name(input):
     pass
@@ -63,12 +87,18 @@ def main(): # Menu
     name_file = open('Name.txt', 'r')
     name = name_file.read()
     
+    # Precondiiton and check text file
+    make_file()
+    
+    # Greet the user
+    print(f"Welcome back, {name}!")
+    time.sleep(1)
+    print(f"It is {dt.now().strftime("%B %d, %Y")}.")
+    time.sleep(2)
+    
     while True:
-        # Precondiiton and check text file
-        make_file()
-        
-        # Greet the user
-        print(f"Welcome back, {name}!\nIt is {dt.now().strftime("%B %d, %Y")}.")
+        clear_console
+        print("What would you like to do?")
         print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Sort Inventory':<20} {'8. Search Inventory'}\n9. Terminate Program\n")
         option = input()
         
@@ -91,8 +121,7 @@ def main(): # Menu
                 clear_console() # Change Name
                 break
             case "7": # Sort Invenotory
-                clear_console()
-                break
+                sort_inventory()
             case "8": # Search Inventory
                 clear_console()
                 break
