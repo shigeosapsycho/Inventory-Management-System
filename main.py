@@ -120,7 +120,7 @@ def main(): # Menu
             case "6":
                 clear_console() # Change Name
                 break
-            case "7": # Sort Invenotory
+            case "7": # Sort Inventory
                 sort_inventory()
             case "8": # Search Inventory
                 clear_console()

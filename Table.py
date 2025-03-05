@@ -1,3 +1,4 @@
+from datetime import datetime as dt
 class Table:
     def __init__(self, inv_filename="Inventory.txt", sold_inventory="Sold_Inventory.txt"):
         self.inventory_file, self.sold_inventory_file = inv_filename, sold_inventory
@@ -99,7 +100,8 @@ class Table:
 
     def update_item_stock(self, index, number): # NOT FINISHED
         """ Update the stock of an item """
-        # Can only update by += 1
+        # If you change the stock by removing from the stock, then ask, "Did you mean to move to sold_inventory?"
+        # If they say yes move to sold inventory (quantity) and price sold @, if no then go ahead with the operation
         if number > 0:
             if 0 <= index < len(self.inventory):
                 update_entry = self.inventory[index]
@@ -114,7 +116,8 @@ class Table:
                 
                 with open(self.inventory_file, "w") as file:
                     pass
-        ValueError("Number has to be greater than 0.")
+        elif number < 0:
+            pass
                 
     def load_sold_inventory(self):
         self.sold_inventory.clear()
@@ -163,3 +166,6 @@ t.load_sold_inventory()
 print(t.check_inventory())
 print()
 print(t.check_sold_inventory())
+
+# Needed for later:
+# | DATE                                                                     |
