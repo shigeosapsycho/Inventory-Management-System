@@ -174,7 +174,7 @@ def update_item_menu(inventory_table):
     inventory_table.load_inventory()
     print(inventory_table.check_inventory())
     try:
-        index = int(input("Enter the index of the item to update: "))
+        index = int(input("Enter the index of the item to update: ")) + 1
         number = int(input("Enter the number to update the stock (positive to add, negative to remove): "))
     except:
         print("Invalid input.")
