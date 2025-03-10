@@ -1,35 +1,34 @@
 import os, time, sys
 from datetime import datetime as dt
-import Table as Table
+from Table import Table
 
 def clear_console():
-    """ Clear console """
+    """Clear console."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def check_first_time():
-    """ Check if it's the user's first time ever opening the program """
+    """Check if it's the user's first time ever opening the program."""
     file = "Name.txt"
     if os.path.exists(file):
-        return True
+        return
     else:
         prompt = input("Looks like it is your first time opening this program. What is your name?\n")
-        with open(file, "w") as file:
-            file.write(prompt)
+        with open(file, "w") as f:
+            f.write(prompt)
 
 def clear_inventory():
-    """ Clear the inventory, prompts the user if they are sure with their choice. """
+    """Clear the inventory; prompts the user if they are sure with their choice."""
     clear_console()
     while True:
         confirmation = input("Are you sure you want to clear your inventory?\nYou can NOT revert this change Y/N\n\n").upper()
-        
-        if confirmation == "YES" or confirmation == "Y":
+        if confirmation in ["YES", "Y"]:
             print("Inventory Cleared.")
             with open("Inventory.txt", "w") as file:
                 file.write("")
             time.sleep(1)
             clear_console()
             break
-        elif confirmation == "NO" or confirmation == "N":
+        elif confirmation in ["NO", "N"]:
             print("Inventory deletion voided. Returning back to the menu.")
             time.sleep(1)
             clear_console()
@@ -40,111 +39,205 @@ def clear_inventory():
             clear_console()
 
 def make_file():
-    """ Makes the files Inventory.txt and Sold_Inventory.txt for the program"""
+    """Makes the files Inventory.txt and Sold_Inventory.txt for the program."""
     folder_directory = os.getcwd()
     files = ["Inventory.txt", "Sold_Inventory.txt"]
-    
     file_paths = {name: os.path.join(folder_directory, name) for name in files}
 
-    if not all(os.path.exists(file_paths[file]) for file in files):
-        for file in files:
-            with open(file, "w") as file:
+    for name in files:
+        if not os.path.exists(file_paths[name]):
+            with open(name, "w") as f:
                 pass
 
 def sort_inventory():
     clear_console()
-    while True:
-        if os.stat("Inventory.txt").st_size == 0:
-            print("Your file has nothing to sort.")
-            time.sleep(1)
-            clear_console()
-        sort_option = input(f"Sort inventory set by:\n{'1. Set':<10} {'2. Alphabetical Order':<10}\n{'3. Stock':<10} {'4. Price':<10}\n{'5. Exit':<10}\n")
-        
-        match sort_option:
-            case "1":
-                pass
-            case "2":
-                pass
-            case "3":
-                pass
-            case "4":
-                pass
-            case "5":
-                clear_console()
-                break
-            case _:
-                print("Not a valid option.")
-                time.sleep(1)
-                clear_console()
-        pass
+    # Read inventory file
+    with open("Inventory.txt", "r") as f:
+        lines = [line.strip() for line in f if line.strip()]
+    if not lines:
+        print("Your file has nothing to sort.")
+        time.sleep(1)
+        clear_console()
+        return
 
-def change_name(input):
-    pass
+    # Convert lines into a list of tuples (set, item, stock, price)
+    data = []
+    for line in lines:
+        parts = line.split("|")
+        if len(parts) == 4:
+            set_val, item, stock, price = parts
+            try:
+                stock_val = int(stock)
+            except:
+                stock_val = stock
+            try:
+                price_val = float(price)
+            except:
+                price_val = price
+            data.append((set_val, item, stock_val, price_val))
 
-def main(): # Menu
+    sort_option = input("Sort inventory set by:\n1. Set\n2. Alphabetical Order\n3. Stock\n4. Price\n5. Exit\n")
+    if sort_option == "1":
+        sorted_data = sorted(data, key=lambda x: x[0].upper())
+    elif sort_option == "2":
+        sorted_data = sorted(data, key=lambda x: x[1].upper())
+    elif sort_option == "3":
+        sorted_data = sorted(data, key=lambda x: x[2])
+    elif sort_option == "4":
+        sorted_data = sorted(data, key=lambda x: x[3])
+    elif sort_option == "5":
+        clear_console()
+        return
+    else:
+        print("Not a valid option.")
+        time.sleep(1)
+        clear_console()
+        return
+
+    # Write sorted data back to Inventory.txt
+    with open("Inventory.txt", "w") as f:
+        for item in sorted_data:
+            f.write(f"{item[0]}|{item[1]}|{item[2]}|{item[3]}\n")
+    print("Inventory sorted.")
+    time.sleep(1)
+    clear_console()
+
+def change_name():
+    clear_console()
+    new_name = input("Enter your new name: ")
+    with open("Name.txt", "w") as f:
+        f.write(new_name)
+    print("Name updated.")
+    time.sleep(1)
+    clear_console()
+
+def search_inventory():
+    clear_console()
+    search_term = input("Enter search term (set code or item name): ").strip().lower()
+    with open("Inventory.txt", "r") as f:
+        lines = f.readlines()
+    results = []
+    for i, line in enumerate(lines):
+        if search_term in line.lower():
+            results.append((i, line.strip()))
+    if results:
+        print("Search Results:")
+        for index, result in results:
+            print(f"Index {index}: {result}")
+    else:
+        print("No matching items found.")
+    input("Press Enter to return to the menu...")
+    clear_console()
+
+def add_item_menu(inventory_table):
+    clear_console()
+    set_code = input("Enter Set (max 3 characters): ").strip()
+    if len(set_code) > 3:
+        print("Set name cannot be longer than 3 characters.")
+        time.sleep(1)
+        return
+    item_name = input("Enter Item Name: ").strip()
+    try:
+        stock = int(input("Enter Stock (integer): "))
+    except:
+        print("Stock must be an integer.")
+        time.sleep(1)
+        return
+    try:
+        price = float(input("Enter Price: "))
+    except:
+        print("Invalid price format.")
+        time.sleep(1)
+        return
+    inventory_table.add_item(set_code, item_name, stock, price)
+    print("Item added.")
+    time.sleep(1)
+
+def remove_item_menu(inventory_table):
+    clear_console()
+    inventory_table.load_inventory()
+    print(inventory_table.check_inventory())
+    try:
+        index = int(input("Enter the index of the item to remove (starting from 0): "))
+    except:
+        print("Invalid index.")
+        time.sleep(1)
+        return
+    inventory_table.remove_item(index)
+    time.sleep(1)
+
+def update_item_menu(inventory_table):
+    clear_console()
+    inventory_table.load_inventory()
+    print(inventory_table.check_inventory())
+    try:
+        index = int(input("Enter the index of the item to update: "))
+        number = int(input("Enter the number to update the stock (positive to add, negative to remove): "))
+    except:
+        print("Invalid input.")
+        time.sleep(1)
+        return
+    inventory_table.update_item_stock(index, number)
+    time.sleep(1)
+
+def check_inventory_menu(inventory_table):
+    clear_console()
+    inventory_table.load_inventory()
+    print(inventory_table.check_inventory())
+    input("Press Enter to return to the menu...")
+    clear_console()
+
+def check_sold_inventory_menu(inventory_table):
+    clear_console()
+    inventory_table.load_sold_inventory()
+    print(inventory_table.check_sold_inventory())
+    input("Press Enter to return to the menu...")
+    clear_console()
+
+def main():
     clear_console()
     check_first_time()
-    name_file = open('Name.txt', 'r')
-    name = name_file.read()
-    
-    # Precondiiton and check text file
+    with open('Name.txt', 'r') as name_file:
+        name = name_file.read().strip()
     make_file()
-    
-    # Greet the user
     print(f"Welcome back, {name}!")
     time.sleep(1)
-    print(f"It is {dt.now().strftime("%B %d, %Y")}.")
+    print(f"It is {dt.now().strftime('%B %d, %Y')}.")
     time.sleep(2)
-    
+    inventory_table = Table()
     while True:
-        clear_console
+        clear_console()
         print("What would you like to do?")
-        print(f"{'1. Check Inventory':<20} {'2. Add Item'}\n{'3. Remove Item':<20} {'4. Update Item'}\n{'5. Clear Inventory':<20} {'6. Change Name'}\n{'7. Sort Inventory':<20} {'8. Search Inventory'}\n9. Terminate Program\n")
-        option = input()
-        
-        match option:
-            case "1": # Check Inventory
-                print("Option 1")
-                clear_console()
-            case "2": # Add Item
-                clear_console()
-                break
-            case "3": # Remove Item
-                clear_console()
-                break
-            case "4": # Update Item
-                clear_console()
-                break
-            case "5": # Clear Inventory
-                clear_inventory()
-            case "6":
-                clear_console() # Change Name
-                break
-            case "7": # Sort Inventory
-                sort_inventory()
-            case "8": # Search Inventory
-                clear_console()
-                break
-            case "9": # Terminate Program
-                print(f"See you next time, {name}!")
-                sys.exit()
-            case _:
-                clear_console()
-                print("Invalid option.")
-                time.sleep(1)
-            
+        print(f"{'1. Check Inventory':<25} {'2. Add Item':<25}")
+        print(f"{'3. Remove Item':<25} {'4. Update Item':<25}")
+        print(f"{'5. Clear Inventory':<25} {'6. Change Name':<25}")
+        print(f"{'7. Sort Inventory':<25} {'8. Search Inventory':<25}")
+        print(f"{'9. Check Sold Inventory':<25} {'10. Terminate Program':<25}")
+        option = input("Enter option: ")
+        if option == "1":
+            check_inventory_menu(inventory_table)
+        elif option == "2":
+            add_item_menu(inventory_table)
+        elif option == "3":
+            remove_item_menu(inventory_table)
+        elif option == "4":
+            update_item_menu(inventory_table)
+        elif option == "5":
+            clear_inventory()
+        elif option == "6":
+            change_name()
+        elif option == "7":
+            sort_inventory()
+        elif option == "8":
+            search_inventory()
+        elif option == "9":
+            check_sold_inventory_menu(inventory_table)
+        elif option == "10":
+            print(f"See you next time, {name}!")
+            sys.exit()
+        else:
+            print("Invalid option.")
+            time.sleep(1)
+
 if __name__ == "__main__":
     main()
-    
-""" Current plans:
-Greet User:
-    Greet the user in good morning/good afternoon depending on the time of day
-Search Inventory:
-    When searching inventory you are dispalyed these options:
-        Search by: 1. Set or Item
-Sort Inventory:
-    When sortiong inventory you are displayed these options:
-        Sort by: 1. Set, 2. Alphabetical Order, 3. Stock, 4. Price
-Clear Inventory:
-    Decide if I want to make it replace everything in the text or to delet the file so they can recover it in the trash can.
-"""
