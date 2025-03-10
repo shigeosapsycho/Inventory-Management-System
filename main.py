@@ -1,4 +1,6 @@
-import os, time, sys
+import os
+import time
+import sys
 from datetime import datetime as dt
 from Table import Table
 
@@ -123,7 +125,8 @@ def search_inventory():
     if results:
         print("Search Results:")
         for index, result in results:
-            print(f"Index {index}: {result}")
+            changed_result = result.replace ("|", " | ")
+            print(f"{changed_result}")
     else:
         print("No matching items found.")
     input("Press Enter to return to the menu...")
@@ -200,7 +203,12 @@ def main():
     with open('Name.txt', 'r') as name_file:
         name = name_file.read().strip()
     make_file()
-    print(f"Welcome back, {name}!")
+    
+    # Good afternoon/morning
+    current_hour = dt.now().hour
+    greeting = "Good morning" if current_hour < 12 else "Good afternoon"
+    
+    print(f"{greeting}, {name}!")
     time.sleep(1)
     print(f"It is {dt.now().strftime('%B %d, %Y')}.")
     time.sleep(2)
@@ -208,30 +216,39 @@ def main():
     while True:
         clear_console()
         print("What would you like to do?")
-        print(f"{'1. Check Inventory':<25} {'2. Add Item':<25}")
-        print(f"{'3. Remove Item':<25} {'4. Update Item':<25}")
-        print(f"{'5. Clear Inventory':<25} {'6. Change Name':<25}")
-        print(f"{'7. Sort Inventory':<25} {'8. Search Inventory':<25}")
-        print(f"{'9. Check Sold Inventory':<25} {'10. Terminate Program':<25}")
+        print(f"{'1.  Check Inventory':<30} {'2.  Add Item':<30}")
+        print(f"{'3.  Remove Item':<30} {'4.  Update Item':<30}")
+        print(f"{'5.  Sort Inventory':<30} {'6.  Search Inventory':<30}")
+        print(f"{'7.  Check Sold Inventory':<30} {'8.  Clear Inventory':<30}")
+        print(f"{'9.  Change Name':<30} {'10. Terminate Program':<30}")
         option = input("Enter option: ")
         if option == "1":
+            # Check inventory
             check_inventory_menu(inventory_table)
         elif option == "2":
+            # Add item
             add_item_menu(inventory_table)
         elif option == "3":
+            # Remove item
             remove_item_menu(inventory_table)
         elif option == "4":
+            # Update item
             update_item_menu(inventory_table)
         elif option == "5":
-            clear_inventory()
-        elif option == "6":
-            change_name()
-        elif option == "7":
+            # Sort inventory
             sort_inventory()
-        elif option == "8":
+            check_inventory_menu(inventory_table)
+        elif option == "6":
+            # Search inventory
             search_inventory()
-        elif option == "9":
+        elif option == "7":
+            # Check sold inventory
             check_sold_inventory_menu(inventory_table)
+        elif option == "8":
+            # Clear inventory
+            clear_inventory()
+        elif option == "9":
+            change_name()
         elif option == "10":
             print(f"See you next time, {name}!")
             sys.exit()
