@@ -6,3 +6,4 @@ PRE|Booster Bundle|21|65.0
 SFA|Kingdra ex box|1|50.0
 MIX|Legendary Warriors Premium Collection|2|100.0
 PRE|Surprise Box|1|70.0
+SCR|Elite Trainer Box|4|60.00

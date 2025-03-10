@@ -161,7 +161,7 @@ def remove_item_menu(inventory_table):
     inventory_table.load_inventory()
     print(inventory_table.check_inventory())
     try:
-        index = int(input("Enter the index of the item to remove (starting from 0): "))
+        index = int(input("Enter the index of the item to remove: ")) + 1
     except:
         print("Invalid index.")
         time.sleep(1)
