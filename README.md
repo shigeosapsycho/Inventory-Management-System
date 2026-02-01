@@ -1,33 +1,33 @@
-# 📦 Inventory Management System
+# Inventory Management System
 
 A simple, effective command-line inventory management system built with Python. Perfect for tracking personal collections, small business stock, or any list of items with quantities and prices.
 
 -----
 
-### ✨ Features
+### Features
 
-  * **📊 View Inventories**: Check your current stock and sold items in neatly formatted tables.
-  * **✏️ Full CRUD Operations**:
+  * **View Inventories**: Check your current stock and sold items in neatly formatted tables.
+  * **Full CRUD Operations**:
       * **Add** new items to your inventory.
       * **Remove** items by selecting them from the list.
       * **Update** the stock count of any item.
-  * **💰 Track Sales**: When stock is removed, you can move it to the "Sold Inventory" log to keep a record of sales.
-  * **🔍 Sort & Search**:
+  * **Track Sales**: When stock is removed, you can move it to the "Sold Inventory" log to keep a record of sales.
+  * **Sort & Search**:
       * Sort your inventory by Set, Alphabetical Order, Stock, or Price.
       * Search for items by set code or name to find what you need quickly.
-  * **🗑️ Clear Inventory**: Start fresh by clearing all items from your inventory after a confirmation prompt.
-  * **👋 Personalized Greeting**: The app greets you by name and wishes you a good morning or afternoon.
-  * **✅ Simple & Dependency-Free**: Runs with a standard Python installation, no external libraries needed.
+  * **Clear Inventory**: Start fresh by clearing all items from your inventory after a confirmation prompt.
+  * **Personalized Greeting**: The app greets you by name and wishes you a good morning or afternoon.
+  * **Simple & Dependency-Free**: Runs with a standard Python installation, no external libraries needed.
 
 -----
 
-### ⚙️ Requirements
+### Requirements
 
   * Python 3.x
 
 -----
 
-### 🚀 Getting Started
+### Getting Started
 
 1.  **Get the code:**
     Could you clone this repository or download the files into a single directory?
@@ -46,7 +46,7 @@ A simple, effective command-line inventory management system built with Python. 
 
 -----
 
-### 📂 File Structure
+### File Structure
 
 ```
 .
@@ -60,7 +60,7 @@ A simple, effective command-line inventory management system built with Python. 
 
 -----
 
-### 🛠️ How It Works
+### How It Works
 
 This system operates using a few core components:
 
